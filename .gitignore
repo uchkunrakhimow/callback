@@ -1,0 +1,10 @@
+.vscode
+.idea
+
+logs
+node_modules
+public/uploads
+
+package-lock.json
+pnpm-lock.yaml
+yarn.lock

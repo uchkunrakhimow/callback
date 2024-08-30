@@ -1,0 +1,40 @@
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'calling_system'
+      MYSQL_ROOT_PASSWORD: 'rootpasswd'
+    ports:
+      - '3306:3306'
+    networks:
+      my-network:
+        ipv4_address: '172.20.0.2'
+    volumes:
+      - db-data:/var/lib/mysql
+
+  callback:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '80:3000'
+    volumes:
+      - .:/usr/src/callback
+    networks:
+      my-network:
+        ipv4_address: '172.20.0.3'
+    env_file:
+      - .env
+
+networks:
+  my-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: '172.20.0.0/16'
+          gateway: '172.20.0.1'
+
+volumes:
+  db-data:
